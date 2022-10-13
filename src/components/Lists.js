@@ -31,12 +31,14 @@ import { getLists,makeList,deleteList } from "../api";
         })
     }
     handlesubmit = (e) => {
+      e.preventDefault()
       let name=(e.target['0'].value);
       let board=(this.props.match.params['id'])
       let {getList}=this.props
       makeList(name,board).then(()=>{
         getList()(board)
         .then((lists) => {
+          (e.target['0'].value)=""
           this.setState({
             loader: false,
           });
@@ -90,7 +92,6 @@ import { getLists,makeList,deleteList } from "../api";
             <input
               placeholder="create a new list"
               type="text"
-              onChange={(e) => this.handleChange(e)}
             />
             <button
               type="submir"

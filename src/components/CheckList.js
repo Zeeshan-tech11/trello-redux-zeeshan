@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react'
+import React, { Component } from 'react'
 import { getChecklist,createCheckList,deletchecklist,deleteCHeckitem,createCheckItem} from '../api'
 import { connect } from 'react-redux'
 import { Box, Heading ,Checkbox,Input,Button,ListItem, List, Flex} from '@chakra-ui/react'
@@ -11,7 +11,6 @@ class CheckList extends Component {
         this.state = {
            loader:true
         }
-        this.nameRef=createRef()
       }
     componentDidMount(){
         let {cardId}=this.props
@@ -24,14 +23,20 @@ class CheckList extends Component {
         })
     }
   handleCreate=(e)=>{
-    if(!this.nameRef.current.value || !this.nameRef.current.value.trim()){
+    e.preventDefault()
+    let name=(e.target['0'].value);
+    
+    if(!name || !name.trim()){
       return
     }
+    
     let {cardId,createchecklist}=this.props
-   let name=(this.nameRef.current.value);
    createCheckList(cardId,name).then(res=>{
     createchecklist()(res)
-    this.nameRef.current.value=""
+    e.target['0'].value=""
+    this.setState({
+      loader:false
+    })
    })
   }
   handleCheckDel=(checkid)=>{
@@ -51,7 +56,6 @@ class CheckList extends Component {
   }
   handelSubmit = (e,id) => {
     e.preventDefault()
-    console.log('inside submit');
     let name=(e.target['0'].value);
 
     if(!name || !name.trim()){
@@ -117,17 +121,17 @@ class CheckList extends Component {
        }
        </div>
       </div>
-      
-            <Input name="boardName" placeholder="Type the checklist name" size="lg" ref={this.nameRef}/>
+             <form onSubmit={this.handleCreate}>
+            <Input name="boardName" placeholder="Type the checklist name" size="lg"/>
             <Button
+            type='submit'
               m=".8rem"
               colorScheme="teal"
               variant="solid"
-              onClick={this.handleCreate}
             >
                 Create new checklist
             </Button>
-            
+            </form>
       </>
     )
   }

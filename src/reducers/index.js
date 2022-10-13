@@ -35,13 +35,23 @@ export const boardReducer=(state=initialState,action)=>{
                 }
             }
         case "ADD_CARD":
-            return {
-                ...state,
-                boards:{
-                    ...state.boards,
-                    cards:{...state.boards.cards,[action.id]:[...state.boards.cards[action.id],action.card]}
+            if(state.boards.cards[action.id]){
+                return {
+                    ...state,
+                    boards:{
+                        ...state.boards,
+                        cards:{...state.boards.cards,[action.id]:[...state.boards.cards[action.id],action.card]}
+                         }
+                }}else{
+                  return {
+                    ...state,
+                    boards:{
+                        ...state.boards,
+                        cards:{...state.boards.cards,[action.id]:[action.card]}
+                    }
+                  }
                 }
-            }
+           
         case "ADD_CHECKLIST":
             let items={}
             if(action.checklists.length>0){
@@ -88,12 +98,21 @@ export const boardReducer=(state=initialState,action)=>{
             }
         }
         case 'ADD_CHECK_ITEM':{
+            if(state.boards.checkItems[action.id]){
             return {
                 ...state,
                 boards:{
                     ...state.boards,
                     checkItems:{...state.boards.checkItems,[action.id]:[...state.boards.checkItems[action.id],action.item]}
                 }
+            }}else{
+              return {
+                ...state,
+                boards:{
+                    ...state.boards,
+                    checkItems:{...state.boards.checkItems,[action.id]:[action.item]}
+                }
+              }
             }
         }
         default:
