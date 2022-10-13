@@ -3,7 +3,8 @@ const initialState={
         boardsdata:[],
         lists:[],
         cards:{},
-        checklists:[]
+        checklists:[],
+        checkItems:{}
     }
 }
 
@@ -42,14 +43,59 @@ export const boardReducer=(state=initialState,action)=>{
                 }
             }
         case "ADD_CHECKLIST":
+            let items={}
+            if(action.checklists.length>0){
+            action.checklists.forEach((curr)=>{
+                  items[curr.id]=curr.checkItems;
+            })}
             return {
                 ...state,
                 boards:{
                     ...state.boards,
-                    checklists:action.checklists
+                    checklists:action.checklists,
+                    checkItems:items
 
                 }
             }
+        case "CREATE_CHECKLIST":
+            return {
+                ...state,
+                boards:{
+                    ...state.boards,
+                    checklists:[...state.boards.checklists,action.checklist]
+
+                }
+            }
+        case "DEL_CHECKLIST":
+            let del=state.boards.checklists.filter(list=>list.id!==action.id)
+            return {
+                ...state,
+                boards:{
+                    ...state.boards,
+                    checklists:del
+
+                }
+            }
+        case 'DEL_CHECKITEMS':{
+            let arr=[...state.boards.checkItems[action.id]]
+            let filterd=arr.filter((ele,idx)=>idx!==action.index)
+            return {
+                ...state,
+                boards:{
+                    ...state.boards,
+                    checkItems:{...state.boards.checkItems,[action.id]:filterd}
+                }
+            }
+        }
+        case 'ADD_CHECK_ITEM':{
+            return {
+                ...state,
+                boards:{
+                    ...state.boards,
+                    checkItems:{...state.boards.checkItems,[action.id]:[...state.boards.checkItems[action.id],action.item]}
+                }
+            }
+        }
         default:
             return state
     }

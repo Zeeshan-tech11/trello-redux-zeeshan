@@ -106,3 +106,56 @@ export const deleteList=(id)=>{
     .then(text => (text))
     .catch(err => console.error(err));
 }
+export const createCheckList=(id,name)=>{
+  return fetch(`https://api.trello.com/1/checklists?idCard=${id}&key=${APIKey}&token=${APIToken}&name=${name}`, {
+   method: 'POST'
+ })
+   .then(response => {
+     console.log(
+       `Response: ${response.status} ${response.statusText}`
+     );
+     return response.json();
+   })
+   .then(text => (text))
+   .catch(err => console.error(err));
+ }
+ 
+export const deletchecklist=(id)=>{
+  return fetch(`https://api.trello.com/1/checklists/${id}?key=${APIKey}&token=${APIToken}`, {
+    method: 'DELETE'
+  })
+    .then(response => {
+      console.log(
+        `Response: ${response.status} ${response.statusText}`
+      );
+      return response.text();
+    })
+    .then(text => text)
+    .catch(err => console.error(err));
+}
+export const deleteCHeckitem=(id,idCheckItem)=>{
+  return fetch(`https://api.trello.com/1/checklists/${id}/checkItems/${idCheckItem}?key=${APIKey}&token=${APIToken}`, {
+    method: 'DELETE'
+  })
+    .then(response => {
+      console.log(
+        `Response: ${response.status} ${response.statusText}`
+      );
+      return response.text();
+    })
+    .then(text => (text))
+    .catch(err => console.error(err));
+}
+export const createCheckItem=(id,name)=>{
+  return fetch(`https://api.trello.com/1/checklists/${id}/checkItems?name=${name}&key=${APIKey}&token=${APIToken}`, {
+    method: 'POST'
+  })
+    .then(response => {
+      console.log(
+        `Response: ${response.status} ${response.statusText}`
+      );
+      return response.json();
+    })
+    .then(text => (text))
+    .catch(err => console.error(err));
+}
